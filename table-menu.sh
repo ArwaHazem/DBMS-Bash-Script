@@ -29,7 +29,7 @@ do
            ;;
         8)
 	    echo "************************************Return To Databases Menu************************************"
-  	    cd .. #pwd after cd is supposed to be /DB
+  	    cd .. #pwd after cd is supposed to be /DB , prerequisite: cd from connect
             ./../db-menu.sh
             break;;
         *) 
