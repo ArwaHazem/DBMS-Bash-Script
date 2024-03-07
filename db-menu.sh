@@ -4,7 +4,7 @@ PS3="Enter Data-Base Operation Number: "
 select choice in "Create Database" "List Databases" "Connect To Databases" "Drop Database" "Exit"
 do
     case $REPLY in
-        1) echo "./../scripts/db-scripts/db-create.sh"
+        1) ./../scripts/db-scripts/db-create.sh
         ;;
         2) ./../scripts/db-scripts/db-list.sh
         ;;
@@ -12,7 +12,7 @@ do
         ;;
         4) ./../scripts/db-scripts/db-drop.sh
         ;;
-        5)cd .. ; break;
+        5)cd .. ;exit
         ;;
         *) echo "Enter Valid Choice Number"
     esac
