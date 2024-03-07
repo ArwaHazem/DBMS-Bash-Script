@@ -48,7 +48,7 @@ drop_database() {
         echo "No databases created yet."
     fi
 
-    ./../db-menu.sh
+    # ./../db-menu.sh
 
 }
 
