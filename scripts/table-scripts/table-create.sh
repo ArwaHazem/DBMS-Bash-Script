@@ -20,7 +20,6 @@ function create_table {
                     read -p "please enter number of columns: " num_of_cols
                 done
                 declare -i i=1
-                #touch "${tablename}_meta"
                 while [ $i -le $num_of_cols ]; do
                     while [ true ]; do
                         read -p "please enter name of column "$i": " column
@@ -81,14 +80,14 @@ function create_table {
                 touch "$tablename"
                 
                 # Create the metadata file
-                touch ".${tablename}_metadata"
+                touch ".${tablename}-metadata"
                 
                 # Write metadata to the metadata file
                 for ((i=0; i<${#columns_names[@]}; i++)); do
                     if (( i == pkindex )); then
-                        echo "${columns_names[i]}:${columns_types[i]}:PK" >> ".${tablename}_metadata"
+                        echo "${columns_names[i]}:${columns_types[i]}:PK" >> ".${tablename}-metadata"
                     else
-                        echo "${columns_names[i]}:${columns_types[i]}" >> ".${tablename}_metadata"
+                        echo "${columns_names[i]}:${columns_types[i]}" >> ".${tablename}-metadata"
                     fi
                 done
                 clear
