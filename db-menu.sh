@@ -12,7 +12,7 @@ do
         ;;
         4) ./../scripts/db-scripts/db-drop.sh
         ;;
-        5)cd .. ;exit
+        5)cd .. ; exit
         ;;
         *) echo "Enter Valid Choice Number"
     esac

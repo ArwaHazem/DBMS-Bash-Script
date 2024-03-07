@@ -10,13 +10,13 @@ do
             echo "Create Table"
 	    ;;
         2) 
-            echo "Drop Table"
+            ./../../scripts/table-scripts/table-drop.sh
             ;;
         3) 
             echo "Insert into Table" 
             ;;
         4) 
-            echo "List Tables"  
+            ./../../scripts/table-scripts/table-list.sh
             ;;
         5) 
             echo "Select from Table" 
@@ -30,7 +30,7 @@ do
         8)
 	    echo "************************************Return To Databases Menu************************************"
   	    cd .. #pwd after cd is supposed to be /DB , prerequisite: cd from connect
-            ./../db-menu.sh
+            exit
             break;;
         *) 
            echo "Invalid Input"
