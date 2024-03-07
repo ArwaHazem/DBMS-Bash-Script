@@ -18,23 +18,24 @@ connect_to_database() {
         if validate_name "$dbname" ; then
             if [[ -d "./$dbname" ]]; then
                 echo "Connecting to $dbname ... "
+                clear
                 cd "$dbname"
                 ./../../table-menu.sh
                 db_exists=true 
             else
+                clear
                 echo "$dbname does not exist"
             fi
         else
+            clear
             echo "Invalid database name"
         fi
     else
+        clear
         echo "No databases created yet to connect to"
     fi
 
-    if [ "$db_exists" = false ]; then
-        # then pwd is /DB/
-        ./../db-menu.sh
-    fi
+    
 }
 
 connect_to_database 
