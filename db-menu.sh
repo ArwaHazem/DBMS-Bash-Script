@@ -1,10 +1,15 @@
 #!/bin/bash
-clear;
-echo "************************************ Data-Base Menu ************************************"
-PS3="Enter Data-Base Operation Number: "
-select choice in "Create Database" "List Databases" "Connect To Databases" "Drop Database" "Exit"
+
+options=("Create Database" "List Databases" "Connect To Databases" "Drop Database" "Exit")
+
+while [ true ];
 do
-    case $REPLY in
+    echo "************************************ Data-Base Menu ************************************"
+    for ((i=0; i<${#options[@]}; i++)); do
+        echo "$((i+1)). ${options[i]}"
+    done
+    read -p "Enter Data-Base Operation Number:" option
+    case $option in
         1) ./../scripts/db-scripts/db-create.sh
         ;;
         2) ./../scripts/db-scripts/db-list.sh
