@@ -24,7 +24,7 @@ do
             ./../../scripts/table-scripts/table-list.sh
             ;;
         5) 
-            echo "Select from Table" 
+            ./../../scripts/table-scripts/table-select.sh
             ;;
         6)
             echo "Delete from Table"
@@ -35,7 +35,7 @@ do
         8)
   	    cd .. #pwd after cd is supposed to be /DB , prerequisite: cd from connect
             exit
-            break;;
+            ;;
         *) 
            echo "Invalid Input"
     esac

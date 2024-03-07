@@ -21,4 +21,3 @@ function list_tables() {
 }
 
 list_tables
-  

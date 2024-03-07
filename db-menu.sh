@@ -1,4 +1,5 @@
 #!/bin/bash
+clear;
 echo "************************************ Data-Base Menu ************************************"
 PS3="Enter Data-Base Operation Number: "
 select choice in "Create Database" "List Databases" "Connect To Databases" "Drop Database" "Exit"
