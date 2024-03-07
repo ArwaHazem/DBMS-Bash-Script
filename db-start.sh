@@ -12,7 +12,10 @@ chmod +x ./scripts/table-scripts/table-list.sh
 chmod +x ./scripts/table-scripts/table-drop.sh
 chmod +x ./scripts/table-scripts/table-select.sh
 
-#-----------------------------------------------------
+chmod +x ./scripts/table-scripts/table-update.sh
+chmod +x ./scripts/table-scripts/table-create.sh
+chmod +x ./scripts/table-scripts/table-insert.sh
+#-----------------------------------------------------------------------
 
 echo $PWD
 if [[ -d "./DB" ]]; then
