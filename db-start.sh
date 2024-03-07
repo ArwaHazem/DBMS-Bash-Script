@@ -8,6 +8,8 @@ chmod +x ./scripts/db-scripts/db-connect.sh
 chmod +x ./scripts/db-scripts/db-create.sh
 chmod +x ./scripts/db-scripts/db-drop.sh
 chmod +x ./scripts/db-scripts/db-list.sh
+chmod +x ./scripts/table-scripts/table-list.sh
+chmod +x ./scripts/table-scripts/table-drop.sh
 #-----------------------------------------------------
 
 echo $PWD

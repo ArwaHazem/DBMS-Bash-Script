@@ -15,13 +15,13 @@ do
             ./../../scripts/table-scripts/table-create.sh
 	    ;;
         2) 
-            echo "Drop Table"
+            ./../../scripts/table-scripts/table-drop.sh
             ;;
         3) 
             echo "Insert into Table" 
             ;;
         4) 
-            echo "List Tables"  
+            ./../../scripts/table-scripts/table-list.sh
             ;;
         5) 
             echo "Select from Table" 
