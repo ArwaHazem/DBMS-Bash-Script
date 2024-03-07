@@ -9,7 +9,9 @@ function list_databases() {
             then
                 echo -e "\nNo Database exist\n"
         else
+            echo  "***********Database List*************"
             ls -d */ | cut -f1 -d'/'
+            echo "***************************************"
         fi
     
 else 
