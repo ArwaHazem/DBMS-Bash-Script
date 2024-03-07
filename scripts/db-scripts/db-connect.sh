@@ -35,10 +35,7 @@ connect_to_database() {
         echo "No databases created yet to connect to"
     fi
 
-    # if [ "$db_exists" = false ]; then
-    #     # then pwd is /DB/
-    #     ./../db-menu.sh
-    # fi
+    
 }
 
 connect_to_database 
