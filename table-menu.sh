@@ -24,10 +24,10 @@ do
             ./../../scripts/table-scripts/table-list.sh
             ;;
         5) 
-            echo "Select from Table" 
+            ./../../scripts/table-scripts/table-select.sh
             ;;
         6)
-            echo "Delete from Table"
+            ./../../scripts/table-scripts/table-delete.sh
             ;;
         7)
             echo "Update Table"
