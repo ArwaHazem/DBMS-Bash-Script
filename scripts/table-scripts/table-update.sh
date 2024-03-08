@@ -41,8 +41,7 @@ update_all_rows() {
             #valid input to replace with
             awk -v field="$line_number" -v new="$colvalue" 'BEGIN{FS=OFS=":"}{$field=new}1' "$table_name" > temp_file
             cat temp_file > "$table_name"
-            # remove temp file after
-            #rm -f temp_file
+            rm -f temp_file
             clear
             echo "column $column_name updated successfully for all records"
             break
@@ -109,7 +108,7 @@ update_with_condition() {
                 num_of_updates_occured=$(awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) print $0}' "$table_name"| wc -l )
                 awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
                 cat temp_file > "$table_name"
-                rm temp_file
+                rm -f temp_file
             fi
 
         else
