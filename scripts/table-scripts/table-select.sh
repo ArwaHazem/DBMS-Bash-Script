@@ -54,7 +54,6 @@ function selectByRecord() {
         read -p "Enter Column Number: " columnNumber
         if [[ $columnNumber =~ ^[1-9][0-9]*$ ]]
         then
-            columnName=$(awk -F ':' -v columnNum="$columnNumber" 'NR == columnNum {print $1}' ".$tableName-metadata")
             if ((columnNumber < 1 || columnNumber > columnsNum))
             then
                 echo "---Invalid Column Number---"

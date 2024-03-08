@@ -10,9 +10,11 @@ chmod +x ./scripts/db-scripts/db-drop.sh
 chmod +x ./scripts/db-scripts/db-list.sh
 chmod +x ./scripts/table-scripts/table-list.sh
 chmod +x ./scripts/table-scripts/table-drop.sh
+chmod +x ./scripts/table-scripts/table-select.sh
 chmod +x ./scripts/table-scripts/table-update.sh
 chmod +x ./scripts/table-scripts/table-create.sh
 chmod +x ./scripts/table-scripts/table-insert.sh
+chmod +x ./scripts/table-scripts/table-delete.sh
 #-----------------------------------------------------------------------
 
 echo $PWD
