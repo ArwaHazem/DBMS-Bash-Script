@@ -6,7 +6,7 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-tablesList=$(find . -maxdepth 1 -type f -not -name ".*" | cut -f2 -d'/')
+tableList=$(find_valid_tables "$PWD")
 
 
 function selectAll() {
@@ -67,6 +67,8 @@ function selectByRecord() {
                     echo "---No Matched Records Founded---"
                 else
                     echo "--------------Matched Recored--------------"
+                    awk -F':' '{printf "%s | ", $1}' ".$tableName-metadata"
+                    echo -e "\n----------------------values-----------------"
                     echo "$matchedRecords"
                 fi
 
@@ -85,12 +87,12 @@ function selectByRecord() {
 #------------------------------------ select Menu --------------------
 function select_table_menu() {
     #List existed tables 
-    if [[ -z "$tablesList" ]]; then
+    if [[ -z "$tableList" ]]; then
         echo "------No Tables exist in $dbname DataBase ------" 
     else
         echo  "***********Availabe Tables*************"
         typeset -i tableNumber=1
-        for table in $tablesList; do
+        for table in $tableList; do
             echo "$tableNumber- $table"
             ((tableNumber++))
         done
@@ -121,7 +123,7 @@ function select_table_menu() {
                         3)  
                             selectByRecord
                         ;;
-                        4)
+                        4)  clear
                             break
                         ;;
                         *) 

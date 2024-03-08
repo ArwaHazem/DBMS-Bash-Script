@@ -11,7 +11,7 @@ connect_to_database() {
     echo "******************Available DataBases********************"
     # List all directories in one column
     if [ "$(ls -d */ 2>/dev/null)" ]; then
-        ls -d1 */ # List databases
+        ls -d */ | cut -f1 -d'/' # List databases
         read -p "Please Enter DataBase Name: " dbname
         
         # Check if dbname matches the regex pattern
@@ -28,11 +28,11 @@ connect_to_database() {
             fi
         else
             clear
-            echo "Invalid database name"
+            echo "---Invalid database name----"
         fi
     else
         clear
-        echo "No databases created yet to connect to"
+        echo "---No databases created yet to connect to---"
     fi
 
     

@@ -15,7 +15,7 @@ drop_database() {
     echo "******************Available DataBases********************"
     # List all directories in one column
     if [ "$(ls -d */ 2>/dev/null)" ]; then
-        ls -d1 */ # List databases
+        ls -d */ | cut -f1 -d'/' # List databases
         read -p "Please Enter DataBase Name: " dbname
         if validate_name "$dbname" ; then
             if [[ -d "./$dbname" ]]; then
@@ -30,7 +30,7 @@ drop_database() {
                             valid_input=true
                             ;;
                         [Nn] ) 
-                            echo "Drop operation is Canceled"
+                            echo "---Drop operation is Canceled---"
                             valid_input=true
                             ;;
                         * ) 
@@ -42,10 +42,10 @@ drop_database() {
                 echo "$dbname does not exist"
             fi
         else
-            echo "Invalid database name."
+            echo "---Invalid database name---"
         fi
     else
-        echo "No databases created yet."
+        echo "---No databases created yet---"
     fi
 
     # ./../db-menu.sh
