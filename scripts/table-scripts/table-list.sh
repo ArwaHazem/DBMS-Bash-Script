@@ -1,22 +1,21 @@
 #! /usr/bin/bash
 export LC_COLLATE=C
 shopt -s extglob
+source ./../../scripts/utilities.sh
 
+tableList=$(find_valid_tables "$PWD")
 
 function list_tables() {
-    tablesList=$(find . -maxdepth 1 -type f -not -name ".*" | cut -f2 -d'/')
-    
-
-    if [[ -z "$tablesList" ]]; then
+    if [[ -z "$tableList" ]]; then
         echo "------No Tables exist in \"$(basename "$PWD")\" DataBase ------" 
     else
         typeset -i tableNumber=1
         echo  "***********Table List*************"
-        for table in $tablesList; do
+        for table in $tableList; do
             echo "$tableNumber- $table"
             ((tableNumber++))
         done
-        echo "***********************************"
+   
     fi
 }
 

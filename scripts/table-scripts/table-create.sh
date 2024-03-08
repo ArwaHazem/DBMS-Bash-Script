@@ -12,7 +12,7 @@ function create_table {
     if validate_name "$tablename" ; then
             if [[ -f "$tablename" ]]; then
                 clear
-                echo "Table "$tablename" already exists."
+                echo "---Table "$tablename" already exists---"
             else
                 read -p "please enter number of columns: " num_of_cols
                 while [[ ! "$num_of_cols" =~ ^[1-9][0-9]*$ ]]; do
@@ -25,13 +25,13 @@ function create_table {
                         read -p "please enter name of column "$i": " column
                         if validate_name "$column" ; then
                             if [[ " ${columns_names[*]} " =~ " $column " ]]; then
-                                echo "duplicate column name"
+                                echo "---Duplicate Column Name---"
                             else
                                 columns_names+=("$column")
                                 break
                             fi
                         else
-                            echo "invalid column name"
+                            echo "---Invalid Column Name---"
                         fi
                     done
                     while [ true ]; do
@@ -48,7 +48,7 @@ function create_table {
                             break
                             ;;
                         *)
-                            echo "invalid datatype"
+                            echo "---Invalid Datatype---"
                             ;;
                         esac
                     done
@@ -91,12 +91,12 @@ function create_table {
                     fi
                 done
                 clear
-                echo "Table created successfully."
+                echo "---Table created successfully---"
 
             fi
     else
         clear
-        echo "invalid table name"
+        echo "---Invalid table name---"
 
     fi
 }
