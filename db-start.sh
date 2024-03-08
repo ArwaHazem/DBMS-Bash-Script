@@ -1,5 +1,5 @@
 #!/bin/bash
-
+source ./scripts/utilities.sh
 #--------------- update scripts files premission -----------------------
 chmod +x db-start.sh
 chmod +x db-menu.sh
@@ -17,12 +17,23 @@ chmod +x ./scripts/table-scripts/table-insert.sh
 chmod +x ./scripts/table-scripts/table-delete.sh
 #-----------------------------------------------------------------------
 
-echo $PWD
+clear
+#echo $PWD
 if [[ -d "./DB" ]]; then
-    cd DB
+    if check_permission "$USER" "$PWD/DB" "rwx" ; then
+        cd DB
+    else
+        echo "permission denied: $USER user doesn't have permission!" 
+    fi    
 else
-   mkdir DB
-   cd DB
+    if check_permission "$USER" "$PWD" "rwx" ; then
+        mkdir DB
+        cd DB
+    else
+        echo "permission denied: $USER user doesn't have permission!" 
+    fi
 fi
 
+
 ./../db-menu.sh
+

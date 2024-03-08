@@ -41,6 +41,8 @@ update_all_rows() {
             #valid input to replace with
             awk -v field="$line_number" -v new="$colvalue" 'BEGIN{FS=OFS=":"}{$field=new}1' "$table_name" > temp_file
             cat temp_file > "$table_name"
+            # remove temp file after
+            #rm -f temp_file
             clear
             echo "column $column_name updated successfully for all records"
             break

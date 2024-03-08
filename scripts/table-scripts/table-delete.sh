@@ -6,16 +6,16 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-tablesList=$(find . -maxdepth 1 -type f -not -name ".*" | cut -f2 -d'/')
+tableList=$(find_valid_tables "$PWD")
 
 
 function deleteAll(){
     if [ -s "$tableName" ]; then
         echo -n > "$tableName"
         if [ ! -s "$tableName" ]; then
-            echo "\"$tableName\" table deleted successfully"
+            echo "---\"$tableName\" table deleted successfully---"
         else
-            echo "Error in delete \"$tableName\""
+            echo "---Error in delete \"$tableName\"---"
         fi    
     else
         echo "---Table is empty---"
@@ -80,12 +80,12 @@ function deleteByRecord(){
 
 function delete_table_menu(){
   
-    if [[ -z "$tablesList" ]]; then
+    if [[ -z "$tableList" ]]; then
         echo "------No Tables exist in $dbname DataBase ------" 
     else 
         echo  "***********Availabe Tables*************"
         typeset -i tableNumber=1
-        for table in $tablesList; do
+        for table in $tableList; do
             echo "$tableNumber- $table"
             ((tableNumber++))
         done
@@ -109,7 +109,7 @@ function delete_table_menu(){
                         2) 
                             deleteByRecord
                         ;;
-                        3)
+                        3)  clear
                             break
                         ;;
                         *) 

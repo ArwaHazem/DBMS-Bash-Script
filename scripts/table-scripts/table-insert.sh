@@ -50,11 +50,11 @@ function insert_into_table {
             clear
             echo "New record added to $tablename successfully"
         else
-            echo "No valid record to add."
+            echo "---No valid record to add----"
         fi
     else
         clear
-        echo "table $tablename does not exist"
+        echo "---table $tablename does not exist---"
     fi
 }
 

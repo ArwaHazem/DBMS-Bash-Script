@@ -6,17 +6,17 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-tablesList=$(find . -maxdepth 1 -type f -not -name ".*" | cut -f2 -d'/')
+tableList=$(find_valid_tables "$PWD")
 
 
 drop_table() {
     #List existed tables 
-    if [[ -z "$tablesList" ]]; then
+    if [[ -z "$tableList" ]]; then
         echo "------No Tables exist in $dbname DataBase ------" 
     else
         echo  "***********Availabe Tables*************"
         typeset -i tableNumber=1
-        for table in $tablesList; do
+        for table in $tableList; do
             echo "$tableNumber- $table"
             ((tableNumber++))
         done
@@ -39,19 +39,19 @@ drop_table() {
                             valid_input=true
                             ;;
                         [Nn] ) 
-                            echo "Drop operation is Canceled"
+                            echo "---Drop operation is Canceled---"
                             valid_input=true
                             ;;
                         * ) 
-                            echo "Invalid Input. Please enter 'y' or 'n'"
+                            echo "---Invalid Input. Please enter 'y' or 'n'"
                             ;;
                     esac
                 done
             else
-                echo "$tableName table does not exist"
+                echo "---$tableName table does not exist---"
             fi
         else
-            echo "Invalid table name."
+            echo "---Invalid table name---"
         fi
     fi
 }

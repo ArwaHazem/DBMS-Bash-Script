@@ -11,31 +11,33 @@ do
     done
     read -p "Enter Table Operation Number: " choice
     case $choice in
-        1) 
+        1)  clear
             ./../../scripts/table-scripts/table-create.sh
 	    ;;
-        2) 
+        2)  clear
             ./../../scripts/table-scripts/table-drop.sh
-            ;;
-        3) 
-            echo "Insert into Table" 
-            ;;
-        4) 
+        ;;
+
+        3)  clear
+            ./../../scripts/table-scripts/table-insert.sh 
+        ;;
+        4)  clear
             ./../../scripts/table-scripts/table-list.sh
-            ;;
-        5) 
+        ;;
+        5)  clear
             ./../../scripts/table-scripts/table-select.sh
-            ;;
-        6)
+        ;;
+        6)  clear
             ./../../scripts/table-scripts/table-delete.sh
-            ;;
-        7)
-            echo "Update Table"
-           ;;
+        ;;
+        7)  clear
+            ./../../scripts/table-scripts/table-update.sh
+        ;;
         8)
   	    cd .. #pwd after cd is supposed to be /DB , prerequisite: cd from connect
+            clear
             exit
-            ;;
+        ;;
         *) 
            echo "Invalid Input"
     esac
