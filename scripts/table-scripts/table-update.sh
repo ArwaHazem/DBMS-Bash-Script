@@ -114,6 +114,71 @@ update_with_condition() {
     ############### 
 }
 
+update_row_with_pk() {
+    table_name="$1"
+    list_all_columns "$table_name"
+    is_success=false
+    pkname=$(grep ':PK' ".$table_name-metadata" | cut -d':' -f1)
+    pk_col_num=$(grep -n ':PK' ".$table_name-metadata" | cut -d':' -f1)
+    pk_index=$((pk_col_num - 1))
+
+
+    colnames=($(cut -f1 -d: ".$table_name-metadata"))
+    coltypes=($(cut -f2 -d: ".$table_name-metadata"))
+    newvalues=()
+
+    read -r -p "Enter the value of the condition for your primary key $pkname : " condition_value
+    primary_key_values=($(cut -f"$((pk_col_num))" -d: "$table_name"))
+
+    if [[ " ${primary_key_values[*]} " =~ " $condition_value " ]]; then
+
+        for ((i=0; i<${#colnames[@]}; i++)); do
+            if [[ "$i" -eq "$pk_index" ]]; then
+                newvalues+=("$condition_value")
+                continue
+            fi
+            colname="${colnames[i]}"
+            coltype="${coltypes[i]}"
+
+            while true; do
+                read -p "Enter value for column '$colname': " colvalue
+
+                if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
+                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
+                    echo "Invalid input. Column type is 'string', please enter a valid string value."
+                else
+                    newvalues+=("$colvalue")
+                    break
+                fi
+            done
+        done
+
+        for ((i=0; i<${#newvalues[@]}; i++)); do
+            if [[ "$i" -eq "$pk_index" ]]; then
+                continue
+            fi
+            is_success=true
+            awk -v i="$((i + 1))" -v newvalue="${newvalues[$i]}" -v search_col="$pk_col_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} { if ($search_col==search_value){$i=newvalue} print $0}' "$table_name"> temp_file
+            cat temp_file >"$table_name"
+            rm -f temp_file
+        done
+        if $is_success; then
+            echo "row with $pkname = $condition_value  updated successfully"
+        else
+            echo "this update cannot be applied"
+        fi
+        
+
+    else
+        echo "value $condition_value does not exist"
+    fi
+
+
+
+  
+}
+
 ./../../scripts/table-scripts/table-list.sh
 read -p "please enter table name: " tablename
 if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
@@ -121,7 +186,8 @@ if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
         echo "*******************************************"
         echo "1. Update all rows with a certain column value"
         echo "2. Update rows with a condition on column"
-        echo "3. Exit"
+        echo "3. Update all row fields with pk"
+        echo "4. Exit"
         read -p "Enter your choice: " choice
 
         case $choice in
@@ -132,6 +198,9 @@ if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
                 update_with_condition "$tablename"
                 ;;
             3)
+                update_row_with_pk "$tablename"
+                ;;
+            4)
                 echo "Exiting..."
                 exit
                 ;;
