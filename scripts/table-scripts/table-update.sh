@@ -12,7 +12,6 @@ update_all_rows() {
     declare -i line_number
     table_name="$1"
     list_all_columns "$table_name"
-    while true; do
         read -p "Enter the column name you want to update: " column_name
         
         # Check if the column exists in metadata
@@ -22,32 +21,27 @@ update_all_rows() {
             else
                 line_number=$(grep -n "^$column_name:" ".$table_name-metadata" | cut -d ':' -f1)
                 coltype=$(grep "^$column_name:" ".$table_name-metadata" | cut -d ':' -f2)
-                break
+                read -p "Enter value for column '$column_name': " colvalue
+        
+                # Validating input against column type
+                if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
+                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
+                    echo "Invalid input. Column type is 'string', please enter a valid string value."
+                else
+                    #valid input to replace with
+                    awk -v field="$line_number" -v new="$colvalue" 'BEGIN{FS=OFS=":"}{$field=new; print $0}' "$table_name" > temp_file
+                    cat temp_file > "$table_name"
+                    rm -f temp_file
+                    clear
+                    echo "column $column_name updated successfully for all records"
+
+
+                fi
             fi
         else
-            echo "Column $column_name not found."
+            echo "Column $column_name does not exist"
         fi
-    done
-    ######enter new value for this col
-    while true; do
-        read -p "Enter value for column '$column_name': " colvalue
-        
-        # Validating input against column type
-        if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
-            echo "Invalid input. Column type is 'int', please enter a valid integer value."
-        elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
-            echo "Invalid input. Column type is 'string', please enter a valid string value."
-        else
-            #valid input to replace with
-            awk -v field="$line_number" -v new="$colvalue" 'BEGIN{FS=OFS=":"}{$field=new}1' "$table_name" > temp_file
-            cat temp_file > "$table_name"
-            rm -f temp_file
-            clear
-            echo "column $column_name updated successfully for all records"
-            break
-
-        fi
-    done
 }
 
 update_with_condition() {
