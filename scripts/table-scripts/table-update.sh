@@ -50,74 +50,69 @@ update_with_condition() {
 
     list_all_columns "$table_name"
 
-    while true;do
+
         read -r -p "Enter valid column name for the condition: " condition_column_name
 
         # Check if the column exists in metadata
         if grep -q "^$condition_column_name:" ".$table_name-metadata"; then
             condition_column_num=$(grep -n "^$condition_column_name:" ".$table_name-metadata" | cut -d ':' -f1)
             read -r -p "Enter the value for the condition: " condition_value
-            break
+            ###
+            valid_input=false
+                read -r -p "Enter the column name you want to update: " column_to_update
+                if grep -q "^$column_to_update:" ".$table_name-metadata"; then
+                    column_to_update_num=$(grep -n "^$column_to_update:" ".$table_name-metadata" | cut -d ':' -f1)
+                    coltype=$(grep "^$column_to_update:" ".$table_name-metadata" | cut -d ':' -f2)
+
+
+                    read -r -p "Enter the new value for the column $column_to_update: " new_value
+                    # Validating input against column type
+                    if [[ "$coltype" == "int" && ! "$new_value" =~ ^-?[0-9]+$ ]]; then
+                        echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                    elif [[ "$coltype" == "string" && ! "$new_value" =~ ^[^:]+$ ]]; then
+                        echo "Invalid input. Column type is 'string', please enter a valid string value."
+                    else
+                        #valid datatype but check if it is primary key
+                        if grep -q "^$column_to_update:[^:]*:PK$" ".$table_name-metadata"; then
+                            primary_key_values=($(cut -f"$((column_to_update_num))" -d: "$tablename"))
+                            if [[ " ${primary_key_values[*]} " =~ " $new_value " ]]; then
+                                echo "Value already exists. Please enter a unique value for the primary key."
+                            else
+                                #valid data to replace
+                                # PK is unique then input is valid
+                                valid_input=true
+                            fi
+                        else
+                            # Not a PK and input is valid
+                            valid_input=true
+                        fi
+
+                    fi
+
+                    if $valid_input; then
+                        num_of_updates_occured=$(awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) print $0}' "$table_name"| wc -l )
+                        awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
+                        cat temp_file > "$table_name"
+                        rm -f temp_file
+
+                        if [[ $num_of_updates_occured -gt 0 ]]; then
+                            echo "($num_of_updates_occured) rows Updated Successfully"
+                        else
+                            echo "($num_of_updates_occured) rows matched"
+
+                        fi
+                    fi
+
+                else
+                    echo "Column $column_to_update does not exist"
+                fi
+
         else
             echo "Column $ondition_column_name does not exist"
         fi
-    done
+
     ############### 
-    valid_input=false
-    while [ "$valid_input" = false ]; do
-        read -r -p "Enter the column name you want to update: " column_to_update
-        if grep -q "^$column_to_update:" ".$table_name-metadata"; then
-            column_to_update_num=$(grep -n "^$column_to_update:" ".$table_name-metadata" | cut -d ':' -f1)
-            coltype=$(grep "^$column_to_update:" ".$table_name-metadata" | cut -d ':' -f2)
-
-
-            while true;do
-                read -r -p "Enter the new value for the column $column_to_update: " new_value
-                # Validating input against column type
-                if [[ "$coltype" == "int" && ! "$new_value" =~ ^-?[0-9]+$ ]]; then
-                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
-                elif [[ "$coltype" == "string" && ! "$new_value" =~ ^[^:]+$ ]]; then
-                    echo "Invalid input. Column type is 'string', please enter a valid string value."
-                else
-                    #valid datatype check if primary key
-                    if grep -q "^$column_to_update:[^:]*:PK$" ".$table_name-metadata"; then
-                        primary_key_values=($(cut -f"$((column_to_update_num))" -d: "$tablename"))
-                        if [[ " ${primary_key_values[*]} " =~ " $new_value " ]]; then
-                            echo "Value already exists. Please enter a unique value for the primary key."
-                        else
-                            #valid data to replace
-                            # PK is unique then input is valid
-                            valid_input=true
-                            break 
-                        fi
-                    else
-                        # Not a PK and input is valid
-                        valid_input=true
-                        break 
-                    fi
-
-                fi
-            done
-            if $valid_input; then
-                num_of_updates_occured=$(awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) print $0}' "$table_name"| wc -l )
-                awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
-                cat temp_file > "$table_name"
-                rm -f temp_file
-            fi
-
-        else
-            echo "Column $column_to_update does not exist"
-        fi
-    done
-    ######succesful process
-    if [[ $num_of_updates_occured -gt 0 ]]; then
-        echo "($num_of_updates_occured) rows Updated Successfully"
-    else
-        echo "($num_of_updates_occured) rows matched"
-
-    fi
 }
-
 
 ./../../scripts/table-scripts/table-list.sh
 read -p "please enter table name: " tablename
