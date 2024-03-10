@@ -6,7 +6,7 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-tableList=$(find_valid_tables "$PWD")
+
 
 
 function deleteAll(){
@@ -79,18 +79,7 @@ function deleteByRecord(){
 
 
 function delete_table_menu(){
-  
-    if [[ -z "$tableList" ]]; then
-        echo "------No Tables exist in $dbname DataBase ------" 
-    else 
-        echo  "***********Availabe Tables*************"
-        typeset -i tableNumber=1
-        for table in $tableList; do
-            echo "$tableNumber- $table"
-            ((tableNumber++))
-        done
-        echo "*****************************************"
-    
+        ./../../scripts/table-scripts/table-list.sh
         read -p "Please Enter Table Name You want to select from : " tableName
         if validate_name "$tableName" ; then
             if [[ -f "$tableName" && -f ".$tableName-metadata" ]]; then
@@ -123,7 +112,7 @@ function delete_table_menu(){
         else
             echo "---Invalid Table Name---"
         fi        
-    fi
+  
 
 }
 delete_table_menu

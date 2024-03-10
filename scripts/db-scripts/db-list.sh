@@ -5,7 +5,7 @@ shopt -s extglob
 function list_databases() {
     if [[ "$(basename "$PWD")" == "DB" ]]; 
     then
-        if [[ -z "$(ls -d */ 2> /dev/null | cut -f1 -d'/' )" ]]
+        if [[ -z "$(ls -d */ 2> /dev/null)" ]]
             then
                 echo -e "---No Database exist---\n"
         else

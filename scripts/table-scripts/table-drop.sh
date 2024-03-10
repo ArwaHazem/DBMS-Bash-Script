@@ -6,22 +6,11 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-tableList=$(find_valid_tables "$PWD")
+# tableList=$(find_valid_tables "$PWD")
 
 
 drop_table() {
-    #List existed tables 
-    if [[ -z "$tableList" ]]; then
-        echo "------No Tables exist in $dbname DataBase ------" 
-    else
-        echo  "***********Availabe Tables*************"
-        typeset -i tableNumber=1
-        for table in $tableList; do
-            echo "$tableNumber- $table"
-            ((tableNumber++))
-        done
-        echo "*****************************************"
-        
+        ./../../scripts/table-scripts/table-list.sh
         read -p "Please Enter Table Name You want to drop : " tableName
         if validate_name "$tableName" ; then
 
@@ -53,7 +42,7 @@ drop_table() {
         else
             echo "---Invalid table name---"
         fi
-    fi
+    
 }
 
 drop_table
