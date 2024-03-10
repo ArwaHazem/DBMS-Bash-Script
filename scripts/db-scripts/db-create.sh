@@ -18,7 +18,7 @@ function creat_database(){
 
         else
             echo "  Invalid database name [database name: -contain only character,numbers, _ 
-                                        - start with character or _ only  ]"
+                                        - start with letter or _ only  ]"
         fi
 else 
     echo "---Invalid Path---"    

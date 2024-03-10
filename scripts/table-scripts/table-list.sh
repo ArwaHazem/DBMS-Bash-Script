@@ -3,7 +3,7 @@ export LC_COLLATE=C
 shopt -s extglob
 source ./../../scripts/utilities.sh
 
-tableList=$(find_valid_tables "$PWD")
+tableList=$(list_valid_tables "$PWD")
 
 function list_tables() {
     if [[ -z "$tableList" ]]; then

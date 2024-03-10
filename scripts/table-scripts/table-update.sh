@@ -21,6 +21,7 @@ update_all_rows() {
             else
                 line_number=$(grep -n "^$column_name:" ".$table_name-metadata" | cut -d ':' -f1)
                 coltype=$(grep "^$column_name:" ".$table_name-metadata" | cut -d ':' -f2)
+                
                 read -p "Enter value for column '$column_name': " colvalue
         
                 # Validating input against column type

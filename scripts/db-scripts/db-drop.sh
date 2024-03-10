@@ -39,7 +39,7 @@ drop_database() {
                     esac
                 done
             else
-                echo "$dbname does not exist"
+                echo "$dbname database doesn't exist"
             fi
         else
             echo "---Invalid database name---"
