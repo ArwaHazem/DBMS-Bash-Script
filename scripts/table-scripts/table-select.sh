@@ -86,7 +86,8 @@ function selectByRecord() {
 
 #------------------------------------ select Menu --------------------
 function select_table_menu() {
-        ./../../scripts/table-scripts/table-list.sh
+    ./../../scripts/table-scripts/table-list.sh
+    if [[ ! -z "$tableList" ]]; then
         read -p "Please Enter Table Name You want to select from : " tableName
         if validate_name "$tableName" ; then
 
@@ -125,6 +126,7 @@ function select_table_menu() {
         else
             echo -e "\e[31m---Invalid table name---\e[0m"
         fi
+    fi    
     
 }
 

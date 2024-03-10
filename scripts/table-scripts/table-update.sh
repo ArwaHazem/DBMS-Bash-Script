@@ -3,6 +3,10 @@
 export LC_COLLATE=C
 shopt -s extglob
 
+
+source ./../../scripts/utilities.sh
+tableList=$(list_valid_tables "$PWD")
+
 list_all_columns() {
     echo -e "\e[33mList of all columns:\e[0m"
     awk -F ':' '{print $1}' ".$1-metadata"
@@ -188,53 +192,55 @@ update_row_with_pk() {
 }
 
 ./../../scripts/table-scripts/table-list.sh
-read -p "please enter table name: " tablename
-if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
-    while true; do
-        echo -e "\e[33m*******************************************\e[0m"
-        echo -e "\e[33m1. Update all rows with a certain column value\e[0m"
-        echo -e "\e[33m2. Update rows with a condition on column\e[0m"
-        echo -e "\e[33m3. Update all row fields with pk\e[0m"
-        echo -e "\e[33m4. Exit\e[0m"
-        read -p "Enter your choice: " choice
+if [[ ! -z "$tableList" ]]; then
+    read -p "please enter table name: " tablename
+    if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
+        while true; do
+            echo -e "\e[33m*******************************************\e[0m"
+            echo -e "\e[33m1. Update all rows with a certain column value\e[0m"
+            echo -e "\e[33m2. Update rows with a condition on column\e[0m"
+            echo -e "\e[33m3. Update all row fields with pk\e[0m"
+            echo -e "\e[33m4. Exit\e[0m"
+            read -p "Enter your choice: " choice
 
-         case $choice in
-            1)
-                if [ -s "$tablename" ]; then
-                    clear
-                    update_all_rows "$tablename"
-                else
-                    echo -e "\e[91m---Table is empty----\e[0m"
-                fi
-                
-                ;;
-            2)
-                if [ -s "$tablename" ]; then
-                    clear
-                    update_with_condition "$tablename"
-                else
-                    echo -e "\e[91m---Table is empty----\e[0m"
-                fi
-                
-                ;;
-            3)
-                if [ -s "$tablename" ]; then
-                    clear
-                    update_row_with_pk "$tablename"
-                else
-                    echo -e "\e[91m---Table is empty----\e[0m"
-                fi
-                ;;
-            4)
-                echo -e "\e[91mExiting...\e[0m"
-                exit
-                ;;
-            *)
-                echo -e "\e[91mInvalid choice. Please enter a valid option.\e[0m"
-                ;;
-        esac
-    done
-else
-    clear
-    echo -e "\e[91mtable $tablename does not exist\e[0m"
-fi
+            case $choice in
+                1)
+                    if [ -s "$tablename" ]; then
+                        clear
+                        update_all_rows "$tablename"
+                    else
+                        echo -e "\e[91m---Table is empty----\e[0m"
+                    fi
+                    
+                    ;;
+                2)
+                    if [ -s "$tablename" ]; then
+                        clear
+                        update_with_condition "$tablename"
+                    else
+                        echo -e "\e[91m---Table is empty----\e[0m"
+                    fi
+                    
+                    ;;
+                3)
+                    if [ -s "$tablename" ]; then
+                        clear
+                        update_row_with_pk "$tablename"
+                    else
+                        echo -e "\e[91m---Table is empty----\e[0m"
+                    fi
+                    ;;
+                4)
+                    echo -e "\e[91mExiting...\e[0m"
+                    exit
+                    ;;
+                *)
+                    echo -e "\e[91mInvalid choice. Please enter a valid option.\e[0m"
+                    ;;
+            esac
+        done
+    else
+        clear
+        echo -e "\e[91mtable $tablename does not exist\e[0m"
+    fi
+fi    
