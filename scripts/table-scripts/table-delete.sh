@@ -70,7 +70,7 @@ function delete_table_menu(){
         read -p "Please Enter Table Name You want to select from : " tableName
         if validate_name "$tableName" ; then
             if [[ -f "$tableName" && -f ".$tableName-metadata" ]]; then
-                choices=("Delete All Records" "Delete Record By value" "Exist")
+                choices=("Delete All Records" "Delete Record By value" "Exit")
                 while true ; do
                     echo -e "\e[33m--------------Delete Menu---------------\e[0m"
                     for ((i=0; i<${#choices[@]}; i++)); do
