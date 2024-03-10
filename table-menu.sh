@@ -5,9 +5,9 @@ choices=("Create Table" "Drop Table" "Insert into Table" "List Tables" "Select f
 
 while [ true ];
 do
-    echo "************************************Table Menu************************************"
+    echo -e "\e[33m************************************Table Menu************************************\e[0m"
     for ((i=0; i<${#choices[@]}; i++)); do
-        echo "$((i+1)). ${choices[i]}"
+       echo -e "\e[33m$((i+1)). ${choices[i]}\e[0m"
     done
     read -p "Enter Table Operation Number: " choice
     case $choice in
