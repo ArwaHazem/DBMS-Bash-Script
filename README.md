@@ -44,15 +44,23 @@ After connecting to a specific database Table-Menu will start and contain the fo
 - Delete from Table
 
 
-    with 2 option:
+    with 2 options:
   
     ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/50a387f2-46c8-47d8-838c-7822ba2883fd)
 
 - Update Table
 
 
-    with 3 option:
+    with 3 options:
   
   ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/9691426c-f398-4515-a593-6347fbf00668)
 
+  
+## Colors in the project
+
+| Message             | Color                                                                |
+| ----------------- | ------------------------------------------------------------------ |
+| Any Menu with | ![#FFFF00](https://via.placeholder.com/10/FFFF00?text=+) |
+| Any Error Mesasge | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+)  |
+| Any successful Message | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+)  | 
 
