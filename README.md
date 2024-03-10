@@ -46,7 +46,8 @@ After connecting to a specific database Table-Menu will start and contain the fo
 
     with 2 options:
   
-    ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/50a387f2-46c8-47d8-838c-7822ba2883fd)
+    ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/19c18711-7f04-4251-909a-cbe9b5f080a7)
+
 
 - Update Table
 
