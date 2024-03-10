@@ -62,7 +62,7 @@ After connecting to a specific database Table-Menu will start and contain the fo
 | ------------------- | ------------------------------------------------------------------ | ---------------------------------------- |
 | Any Menu with     | ![#FFFF00](https://via.placeholder.com/10/FFFF00?text=+) |![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/2d0214c0-7e79-4820-a054-4823755edd1d)  |
 | Any Error Message | ![#FF0000](https://via.placeholder.com/10/FF0000?text=+)  | ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/5afd7839-5abb-4d37-b93a-e746fdc0bfb0)  |
-| Any successful Message | ![#00b48a](https://via.placeholder.com/10/00b48a?text=+)  | ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/3b9e1ddd-654d-4d83-bb5b-3fafd31d1b00)
+| Any successful Message | ![#00FF00](https://via.placeholder.com/10/00FF00?text=+)  | ![image](https://github.com/ArwaHazem/DBMS-Bash-Script/assets/54688771/3b9e1ddd-654d-4d83-bb5b-3fafd31d1b00)
      
 
 
