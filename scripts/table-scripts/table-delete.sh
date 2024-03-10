@@ -6,6 +6,7 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
+tableList=$(list_valid_tables "$PWD")
 
 function deleteAll(){
     if [ -s "$tableName" ]; then
@@ -65,36 +66,38 @@ function deleteByRecord(){
 
 function delete_table_menu(){
     ./../../scripts/table-scripts/table-list.sh
-    read -p "Please Enter Table Name You want to select from : " tableName
-    if validate_name "$tableName" ; then
-        if [[ -f "$tableName" && -f ".$tableName-metadata" ]]; then
-            choices=("Delete All Records" "Delete Record By value" "Exist")
-            while true ; do
-                echo -e "\e[33m--------------Delete Menu---------------\e[0m"
-                for ((i=0; i<${#choices[@]}; i++)); do
-                    echo -e "\e[33m$((i+1)). ${choices[i]}\e[0m"
-                done
+    if [[ ! -z "$tableList" ]]; then
+        read -p "Please Enter Table Name You want to select from : " tableName
+        if validate_name "$tableName" ; then
+            if [[ -f "$tableName" && -f ".$tableName-metadata" ]]; then
+                choices=("Delete All Records" "Delete Record By value" "Exist")
+                while true ; do
+                    echo -e "\e[33m--------------Delete Menu---------------\e[0m"
+                    for ((i=0; i<${#choices[@]}; i++)); do
+                        echo -e "\e[33m$((i+1)). ${choices[i]}\e[0m"
+                    done
 
-                read -p "Enter Delete Operation Number: " choice
-                case $choice in
-                    1)
-                        deleteAll
-                    ;;
-                    2)
-                        deleteByRecord
-                    ;;
-                    3)  clear
-                        break
-                    ;;
-                    *)
-                        echo -e "\e[31m---Invalid Input---\e[0m"
-                esac
-            done
+                    read -p "Enter Delete Operation Number: " choice
+                    case $choice in
+                        1)
+                            deleteAll
+                        ;;
+                        2)
+                            deleteByRecord
+                        ;;
+                        3)  clear
+                            break
+                        ;;
+                        *)
+                            echo -e "\e[31m---Invalid Input---\e[0m"
+                    esac
+                done
+            else
+                echo -e "\e[31m$tableName table does not exist\e[0m"
+            fi
         else
-            echo -e "\e[31m$tableName table does not exist\e[0m"
+            echo -e "\e[31m---Invalid Table Name---\e[0m"
         fi
-    else
-        echo -e "\e[31m---Invalid Table Name---\e[0m"
     fi
 }
 
