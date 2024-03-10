@@ -1,8 +1,10 @@
+#!/bin/bash
+
 export LC_COLLATE=C
 shopt -s extglob
 
 list_all_columns() {
-    echo "List of all columns:"
+    echo -e "\e[33mList of all columns:\e[0m"
     awk -F ':' '{print $1}' ".$1-metadata"
 }
 
@@ -17,7 +19,7 @@ update_all_rows() {
         # Check if the column exists in metadata
         if grep -q "^$column_name:" ".$table_name-metadata"; then
             if grep -q "^$column_name:[^:]*:PK$" ".$table_name-metadata"; then
-                echo "Cannot update primary key column $column_name with same value for all records"
+                echo -e "\e[31mCannot update primary key column $column_name with same value for all records\e[0m"
             else
                 line_number=$(grep -n "^$column_name:" ".$table_name-metadata" | cut -d ':' -f1)
                 coltype=$(grep "^$column_name:" ".$table_name-metadata" | cut -d ':' -f2)
@@ -26,22 +28,22 @@ update_all_rows() {
         
                 # Validating input against column type
                 if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
-                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                    echo -e "\e[31mInvalid input. Column type is 'int', please enter a valid integer value.\e[0m"
                 elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
-                    echo "Invalid input. Column type is 'string', please enter a valid string value."
+                    echo -e "\e[31mInvalid input. Column type is 'string', please enter a valid string value.\e[0m"
                 else
                     #valid input to replace with
                     awk -v field="$line_number" -v new="$colvalue" 'BEGIN{FS=OFS=":"}{$field=new; print $0}' "$table_name" > temp_file
                     cat temp_file > "$table_name"
                     rm -f temp_file
                     clear
-                    echo "column $column_name updated successfully for all records"
+                    echo -e "\e[32mcolumn $column_name updated successfully for all records\e[0m"
 
 
                 fi
             fi
         else
-            echo "Column $column_name does not exist"
+            echo -e "\e[91mColumn $column_name does not exist\e[0m"
         fi
 }
 
@@ -69,20 +71,26 @@ update_with_condition() {
                     read -r -p "Enter the new value for the column $column_to_update: " new_value
                     # Validating input against column type
                     if [[ "$coltype" == "int" && ! "$new_value" =~ ^-?[0-9]+$ ]]; then
-                        echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                        echo -e "\e[91mInvalid input. Column type is 'int', please enter a valid integer value.\e[0m"
                     elif [[ "$coltype" == "string" && ! "$new_value" =~ ^[^:]+$ ]]; then
-                        echo "Invalid input. Column type is 'string', please enter a valid string value."
+                        echo -e "\e[91mInvalid input. Column type is 'string', please enter a valid string value.\e[0m"
                     else
                         #valid datatype but check if it is primary key
+                        num_of_updates_occured=$(awk -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) print $0}' "$table_name" | wc -l )
                         if grep -q "^$column_to_update:[^:]*:PK$" ".$table_name-metadata"; then
-                            primary_key_values=($(cut -f"$((column_to_update_num))" -d: "$tablename"))
-                            if [[ " ${primary_key_values[*]} " =~ " $new_value " ]]; then
-                                echo "Value already exists. Please enter a unique value for the primary key."
-                            else
-                                #valid data to replace
-                                # PK is unique then input is valid
-                                valid_input=true
-                            fi
+                            if [[ $num_of_updates_occured -le 1 ]]; then
+                                primary_key_values=($(cut -f"$((column_to_update_num))" -d: "$tablename"))
+                                if [[ " ${primary_key_values[*]} " =~ " $new_value " ]]; then
+                                    echo -e "\e[91mValue already exists. Please enter a unique value for the primary key.\e[0m"
+                                else
+                                    #valid data to replace
+                                    # PK is unique then input is valid
+                                    valid_input=true
+                                fi
+                            else 
+                                echo -e "\e[91mCan't update more than one record by same PK value.\e[0m"
+                            fi    
+
                         else
                             # Not a PK and input is valid
                             valid_input=true
@@ -91,25 +99,24 @@ update_with_condition() {
                     fi
 
                     if $valid_input; then
-                        num_of_updates_occured=$(awk -v update_col_num="$column_to_update_num" -v new_val="$new_value" -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) print $0}' "$table_name" | wc -l )
-                        awk -v update_col_num="$column_to_update_num" -v new_val="$new_value" -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
-                        cat temp_file > "$table_name"
-                        rm -f temp_file
-
+                        num_of_updates_occured=$(awk -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) print $0}' "$table_name" | wc -l )
                         if [[ $num_of_updates_occured -gt 0 ]]; then
-                            echo "($num_of_updates_occured) rows Updated Successfully"
+                            awk -v update_col_num="$column_to_update_num" -v new_val="$new_value" -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
+                            cat temp_file > "$table_name"
+                            rm -f temp_file
+                            echo -e "\e[32m($num_of_updates_occured) rows Updated Successfully\e[0m"
                         else
-                            echo "($num_of_updates_occured) rows matched"
+                            echo -e "\e[32m($num_of_updates_occured) rows matched\e[0m"
 
                         fi
                     fi
 
                 else
-                    echo "Column $column_to_update does not exist"
+                    echo -e "\e[91mColumn $column_to_update does not exist\e[0m"
                 fi
 
         else
-            echo "Column $condition_column_name does not exist"
+            echo -e "\e[91mColumn $condition_column_name does not exist\e[0m"
         fi
 
     ############### 
@@ -145,9 +152,9 @@ update_row_with_pk() {
                 read -p "Enter value for column '$colname': " colvalue
 
                 if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
-                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                    echo -e "\e[91mInvalid input. Column type is 'int', please enter a valid integer value.\e[0m"
                 elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
-                    echo "Invalid input. Column type is 'string', please enter a valid string value."
+                    echo -e "\e[91mInvalid input. Column type is 'string', please enter a valid string value.\e[0m"
                 else
                     newvalues+=("$colvalue")
                     break
@@ -165,14 +172,14 @@ update_row_with_pk() {
             rm -f temp_file
         done
         if $is_success; then
-            echo "row with $pkname = $condition_value  updated successfully"
+            echo -e "\e[32mrow with $pkname = $condition_value  updated successfully\e[0m"
         else
-            echo "this update cannot be applied"
+            echo -e "\e[91mthis update cannot be applied\e[0m"
         fi
         
 
     else
-        echo "value $condition_value does not exist"
+        echo -e "\e[91mvalue $condition_value does not exist\e[0m"
     fi
 
 
@@ -184,47 +191,50 @@ update_row_with_pk() {
 read -p "please enter table name: " tablename
 if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
     while true; do
-        echo "*******************************************"
-        echo "1. Update all rows with a certain column value"
-        echo "2. Update rows with a condition on column"
-        echo "3. Update all row fields with pk"
-        echo "4. Exit"
+        echo -e "\e[33m*******************************************\e[0m"
+        echo -e "\e[33m1. Update all rows with a certain column value\e[0m"
+        echo -e "\e[33m2. Update rows with a condition on column\e[0m"
+        echo -e "\e[33m3. Update all row fields with pk\e[0m"
+        echo -e "\e[33m4. Exit\e[0m"
         read -p "Enter your choice: " choice
 
          case $choice in
             1)
                 if [ -s "$tablename" ]; then
+                    clear
                     update_all_rows "$tablename"
                 else
-                    echo "---Table is empty----"
+                    echo -e "\e[91m---Table is empty----\e[0m"
                 fi
                 
                 ;;
             2)
                 if [ -s "$tablename" ]; then
+                    clear
                     update_with_condition "$tablename"
                 else
-                    echo "---Table is empty----"
+                    echo -e "\e[91m---Table is empty----\e[0m"
                 fi
                 
                 ;;
             3)
                 if [ -s "$tablename" ]; then
+                    clear
                     update_row_with_pk "$tablename"
                 else
-                    echo "---Table is empty----"
+                    echo -e "\e[91m---Table is empty----\e[0m"
                 fi
                 ;;
             4)
-                echo "Exiting..."
+                echo -e "\e[91mExiting...\e[0m"
                 exit
                 ;;
             *)
-                echo "Invalid choice. Please enter a valid option."
+                echo -e "\e[91mInvalid choice. Please enter a valid option.\e[0m"
                 ;;
         esac
     done
 else
     clear
-    echo "table $tablename does not exist"
+    echo -e "\e[91mtable $tablename does not exist\e[0m"
 fi

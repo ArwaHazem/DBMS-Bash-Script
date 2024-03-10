@@ -12,7 +12,7 @@ source ./../scripts/utilities.sh
 drop_database() {
 
 
-    echo "******************Available DataBases********************"
+   echo -e "\e[33m******************Available DataBases********************\e[0m"
     # List all directories in one column
     if [ "$(ls -d */ 2>/dev/null)" ]; then
         ls -d */ | cut -f1 -d'/' # List databases
@@ -20,32 +20,32 @@ drop_database() {
         if validate_name "$dbname" ; then
             if [[ -d "./$dbname" ]]; then
                 valid_input=false
-                echo "Are you sure you want to drop $dbname database? (y/n)"
+                echo -e "\e[34mAre you sure you want to drop $dbname database? (y/n)\e[0m"
                 while ! $valid_input; do
                     read -r option
                     case $option in
                         [Yy] ) 
                             rm -r "$dbname"
-                            echo "$dbname database has been dropped"
+                            echo -e "\e[32m$dbname database has been dropped\e[0m"
                             valid_input=true
                             ;;
                         [Nn] ) 
-                            echo "---Drop operation is Canceled---"
+                            echo -e "\e[31m---Drop operation is Canceled---\e[0m"
                             valid_input=true
                             ;;
                         * ) 
-                            echo "Invalid Input. Please enter 'y' or 'n'"
+                            echo -e "\e[31m---Invalid database name---\e[0m"
                             ;;
                     esac
                 done
             else
-                echo "$dbname database doesn't exist"
+                echo -e "\e[31m$dbname database doesn't exist\e[0m"
             fi
         else
-            echo "---Invalid database name---"
+            echo -e "\e[31m---Invalid database name---\e[0m"
         fi
     else
-        echo "---No databases created yet---"
+        echo -e "\e[31m---No databases created yet---\e[0m"
     fi
 
     # ./../db-menu.sh

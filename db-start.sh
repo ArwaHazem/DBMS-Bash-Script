@@ -23,14 +23,14 @@ if [[ -d "./DB" ]]; then
     if check_permission "$USER" "$PWD/DB" "rwx" ; then
         cd DB
     else
-        echo "permission denied: $USER user doesn't have permission!" 
+        echo -e "\e[31mpermission denied: $USER user doesn't have permission!\e[0m"
     fi    
 else
     if check_permission "$USER" "$PWD" "rwx" ; then
         mkdir DB
         cd DB
     else
-        echo "permission denied: $USER user doesn't have permission!" 
+        echo -e "\e[31mpermission denied: $USER user doesn't have permission!\e[0m"
     fi
 fi
 

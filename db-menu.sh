@@ -4,9 +4,10 @@ options=("Create Database" "List Databases" "Connect To Databases" "Drop Databas
 
 while [ true ];
 do 
-    echo "************************************ Data-Base Menu ************************************"
+    echo -e "\e[33m************************************ Data-Base Menu ************************************\e[0m"
     for ((i=0; i<${#options[@]}; i++)); do
-        echo "$((i+1)). ${options[i]}"
+        echo -e "\e[33m$((i+1)). ${options[i]}\e[0m"
+        
     done
     read -p "Enter Data-Base Operation Number:" option
     

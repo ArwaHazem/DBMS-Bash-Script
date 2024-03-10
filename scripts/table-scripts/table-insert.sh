@@ -24,15 +24,15 @@ function insert_into_table {
                 
                 # Validating input against column type
                 if [[ "$coltype" == "int" && ! "$colvalue" =~ ^-?[0-9]+$ ]]; then
-                    echo "Invalid input. Column type is 'int', please enter a valid integer value."
+                    echo -e "\e[31mInvalid input. Column type is 'int', please enter a valid integer value.\e[0m"
                 elif [[ "$coltype" == "string" && ! "$colvalue" =~ ^[^:]+$ ]]; then
-                    echo "Invalid input. Column type is 'string', please enter a valid string value."
+                     echo -e "\e[31mInvalid input. Column type is 'int', please enter a valid integer value.\e[0m"
                 else
                     # Datatype is valid
                     if [[ "$i" -eq "$pk_index" ]]; then
                         primary_key_values=($(cut -f"$((i+1))" -d: "$tablename"))
                         if [[ " ${primary_key_values[*]} " =~ " $colvalue " ]]; then
-                            echo "Value already exists. Please enter a unique value for the primary key."
+                            echo -e "\e[31mValue already exists. Please enter a unique value for the primary key.\e[0m"
                         else
                             newrecord+="$colvalue:"
                             break # PK is unique theb input is valid
@@ -48,13 +48,13 @@ function insert_into_table {
         if [[ -n "$newrecord" ]]; then
             echo "${newrecord::-1}" >> "$tablename"
             clear
-            echo "New record added to $tablename successfully"
+            echo -e "\e[31mNew record added to $tablename successfully\e[0m"
         else
-            echo "---No valid record to add----"
+            echo -e "\e[31m---No valid record to add----\e[0m"
         fi
     else
         clear
-        echo "---table $tablename does not exist---"
+        echo -e "\e[31m---table $tablename does not exist---\e[0m"
     fi
 }
 
