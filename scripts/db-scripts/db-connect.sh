@@ -6,7 +6,6 @@ shopt -s extglob
 source ./../scripts/utilities.sh
 
 connect_to_database() {
-    db_exists=false 
 
     echo "******************Available DataBases********************"
     # List all directories in one column
@@ -21,7 +20,6 @@ connect_to_database() {
                 clear
                 cd "$dbname"
                 ./../../table-menu.sh
-                db_exists=true 
             else
                 clear
                 echo "$dbname does not exist"
