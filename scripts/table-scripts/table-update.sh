@@ -90,8 +90,8 @@ update_with_condition() {
                     fi
 
                     if $valid_input; then
-                        num_of_updates_occured=$(awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) print $0}' "$table_name"| wc -l )
-                        awk -F: -v update_col_num=$column_to_update_num -v new_val=$new_value -v search_col=$condition_column_num -v search_value=$condition_value 'BEGIN{OFS=":";} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
+                        num_of_updates_occured=$(awk -v update_col_num="$column_to_update_num" -v new_val="$new_value" -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) print $0}' "$table_name" | wc -l )
+                        awk -v update_col_num="$column_to_update_num" -v new_val="$new_value" -v search_col="$condition_column_num" -v search_value="$condition_value" 'BEGIN{FS=OFS=":"} {if ($search_col==search_value) {$update_col_num=new_val} print $0}' "$table_name"> temp_file
                         cat temp_file > "$table_name"
                         rm -f temp_file
 
@@ -108,7 +108,7 @@ update_with_condition() {
                 fi
 
         else
-            echo "Column $ondition_column_name does not exist"
+            echo "Column $condition_column_name does not exist"
         fi
 
     ############### 
@@ -190,15 +190,29 @@ if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
         echo "4. Exit"
         read -p "Enter your choice: " choice
 
-        case $choice in
+         case $choice in
             1)
-                update_all_rows "$tablename"
+                if [ -s "$tablename" ]; then
+                    update_all_rows "$tablename"
+                else
+                    echo "---Table is empty----"
+                fi
+                
                 ;;
             2)
-                update_with_condition "$tablename"
+                if [ -s "$tablename" ]; then
+                    update_with_condition "$tablename"
+                else
+                    echo "---Table is empty----"
+                fi
+                
                 ;;
             3)
-                update_row_with_pk "$tablename"
+                if [ -s "$tablename" ]; then
+                    update_row_with_pk "$tablename"
+                else
+                    echo "---Table is empty----"
+                fi
                 ;;
             4)
                 echo "Exiting..."
