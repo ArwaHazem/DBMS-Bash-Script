@@ -7,12 +7,12 @@ tableList=$(list_valid_tables "$PWD")
 
 function list_tables() {
     if [[ -z "$tableList" ]]; then
-        echo "------No Tables exist in \"$(basename "$PWD")\" DataBase ------" 
+        echo -e "\e[31m------No Tables exist in \"$(basename "$PWD")\" DataBase ------\e[0m"
     else
         typeset -i tableNumber=1
-        echo  "***********Table List*************"
+        echo -e "\e[33m***********Table List*************\e[0m"
         for table in $tableList; do
-            echo "$tableNumber- $table"
+            echo -e "$tableNumber- $table"
             ((tableNumber++))
         done
    

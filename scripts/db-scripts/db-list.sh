@@ -7,16 +7,15 @@ function list_databases() {
     then
         if [[ -z "$(ls -d */ 2> /dev/null)" ]]
             then
-                echo -e "---No Database exist---\n"
+                echo -e "\e[31m---No Database exist---\n\e[0m"
         else
-            echo  "***********Database List*************"
+            echo -e "\e[33m***********Database List*************\e[0m"
             ls -d */ | cut -f1 -d'/'
         fi
     
 else 
-    echo "---Invalid Path---"    
+    echo -e "\e[31m---Invalid Path---\e[0m"    
 fi
 
 }
 list_databases
-  

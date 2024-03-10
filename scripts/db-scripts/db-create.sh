@@ -9,19 +9,20 @@ function creat_database(){
         # Check if dbname matches the regex pattern
         if validate_name "$dbname" ; then
             if [ -d "$dbname" ]; then
-                echo "---Database already exist!---"
+                echo -e "\e[31m---Database already exist!---\e[0m"
             else
                 mkdir $dbname
-                echo "---Database created successfully---"
+                echo -e "\e[32m---Database created successfully---\e[0m"
 
             fi
 
         else
-            echo "  Invalid database name [database name: -contain only character,numbers, _ 
-                                        - start with letter or _ only  ]"
+            echo -e "\e[31mInvalid database name [database name: -contain only character,numbers, _ 
+                                      - start with letter or _ only]\e[0m"
+
         fi
 else 
-    echo "---Invalid Path---"    
+    echo -e "\e[31m---Invalid Path---\e[0m"   
 fi
     
 }

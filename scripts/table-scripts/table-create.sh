@@ -12,26 +12,26 @@ function create_table {
     if validate_name "$tablename" ; then
             if [[ -f "$tablename" ]]; then
                 clear
-                echo "---Table "$tablename" already exists---"
+                echo -e "\e[31m---Table \"$tablename\" already exists---\e[0m"
             else
                 read -p "please enter number of columns: " num_of_cols
                 while [[ ! "$num_of_cols" =~ ^[1-9][0-9]{0,3}$ ]]; do
-                    echo "Number of columns must be positive number"
+                    echo -e "\e[31mNumber of columns must be positive number\e[0m"
                     read -p "please enter number of columns: " num_of_cols
                 done
                 declare -i i=1
                 while [ $i -le $num_of_cols ]; do
                     while [ true ]; do
-                        read -p "please enter name of column "$i": " column
+                        read -p "please enter name of column \"$i\": " column
                         if validate_name "$column" ; then
                             if [[ " ${columns_names[*]} " =~ " $column " ]]; then
-                                echo "---Duplicate Column Name---"
+                                echo -e "\e[31m---Duplicate Column Name---\e[0m"
                             else
                                 columns_names+=("$column")
                                 break
                             fi
                         else
-                            echo "---Invalid Column Name---"
+                            echo -e "\e[31m---Invalid Column Name---\e[0m"
                         fi
                     done
                     while [ true ]; do
@@ -48,7 +48,7 @@ function create_table {
                             break
                             ;;
                         *)
-                            echo "---Invalid Datatype---"
+                            echo -e "\e[31m---Invalid Datatype---\e[0m"
                             ;;
                         esac
                     done
@@ -56,26 +56,26 @@ function create_table {
 
                 done
                 #another loop for primary key selection
-                echo "***********Column List************8"
+                echo -e "\e[33m***********Column List************\e[0m"
                 for ((idx=0; idx<${#columns_names[@]}; idx++)); do
-                    echo "$((idx+1)): ${columns_names[idx]}"
+                    echo -e "\e[33m$((idx+1)): ${columns_names[idx]}\e[0m"
                 done
                 while true; do
                     read -p "please enter number of your primary key (mandatory): " pkindex
                     if [[ ! "$pkindex" =~ ^[1-9][0-9]*$ ]]; then
-                        echo "Error: Please enter a valid positive integer"
+                        echo -e "\e[31mError: Please enter a valid positive integer\e[0m"
                         continue
                     fi
 
                     pkindex=$((pkindex-1))
                     # Check if the pkindex is within the range of the array
                     if (( pkindex >= ${#columns_names[@]} || pkindex < 0 )); then
-                        echo "Error: index out of range."
+                        echo -e "\e[31mError: index out of range.\e[0m"
                         continue
                     fi
 
                     # Display the value at the specified pkindex
-                    echo "${columns_names[pkindex]} is selected as primary key"
+                    echo -e "\e[32m${columns_names[pkindex]} is selected as primary key\e[0m"
                     break
                 done
                 touch "$tablename"
@@ -92,12 +92,12 @@ function create_table {
                     fi
                 done
                 clear
-                echo "---Table created successfully---"
+                echo -e "\e[32m---Table created successfully---\e[0m"
 
             fi
     else
         clear
-        echo "---Invalid table name---"
+        echo -e "\e[31m---Invalid table name---\e[0m"
     fi
 }
 create_table

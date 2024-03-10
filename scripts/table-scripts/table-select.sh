@@ -11,12 +11,13 @@ tableList=$(list_valid_tables "$PWD")
 
 function selectAll() {
     if [ -s "$tableName" ]; then
-        echo "---------------------------\"$tableName table\" records-------------------------"
+        echo -e "\e[33m---------------------------\"$tableName table\" records-------------------------\e[0m"
         awk -F':' '{printf "%s | ", $1}' ".$tableName-metadata"
-        echo -e "\n----------------------values-----------------"
+
+        echo -e "\n\e[33m----------------------values-----------------\e[0m"
         sed 's/:/ | /g' "$tableName"
     else
-        echo "---Table is empty----"
+        echo -e "\e[31m---Table is empty----\e[0m"
     fi
 }
 
@@ -32,19 +33,18 @@ function selectByColumn {
             columnName=$(awk -F ':' -v columnNum="$columnNumber" 'NR == columnNum {print $1}' ".$tableName-metadata")
             if ((columnNumber < 1 || columnNumber > columnsNum))
             then
-                echo "---Invalid Column Number---"
+                echo -e "\e[31m---Invalid Column Number---\e[0m"
             else
-                echo "-----------------Column \"$columnName\" data-------------"
+                echo -e "\e[33m-----------------Column \"$columnName\" data-------------\e[0m"
                 awk -F : -v colNum="$columnNumber" '{print $colNum;}' "$tableName"
             fi
         else
-            echo "---Invalid Input---"
+            echo -e "\e[31m---Invalid Input---\e[0m"
         fi  
     else
-        echo "---Table is empty---"
+        echo -e "\e[31m---Table is empty---\e[0m"
     fi
 }
-
 
 function selectByRecord() {
     if [ -s "$tableName" ]; then
@@ -56,7 +56,7 @@ function selectByRecord() {
         then
             if ((columnNumber < 1 || columnNumber > columnsNum))
             then
-                echo "---Invalid Column Number---"
+                echo -e "\e[31m---Invalid Column Number---\e[0m"
             else
                 #Logic is here 
                 read -p "Enter Value: " recordValue 
@@ -64,20 +64,20 @@ function selectByRecord() {
                 matchedRecords=$(awk -F : -v colNum="$columnNumber" -v value="$recordValue" '$colNum == value {print $0}' "$tableName")
 
                 if [[ -z "$matchedRecords" ]]; then
-                    echo "---No Matched Records Founded---"
+                    echo -e "\e[31m---No Matched Records Founded---\e[0m"
                 else
-                    echo "--------------Matched Recored--------------"
+                    echo -e "\e[33m--------------Matched Recored--------------\e[0m"
                     awk -F':' '{printf "%s | ", $1}' ".$tableName-metadata"
-                    echo -e "\n----------------------values-----------------"
+                    echo -e "\n\e[33m----------------------values-----------------\e[0m"
                     echo "$matchedRecords"
                 fi
 
             fi
         else
-            echo "---Invalid Input---"
+            echo -e "\e[31m---Invalid Input---\e[0m"
         fi  
     else
-        echo "---Table is empty---"
+        echo -e "\e[31m---Table is empty---\e[0m"
     fi
 }
 
@@ -94,37 +94,36 @@ function select_table_menu() {
                 #-------------Select Menu----------------
                 choices=("Select All Records" "Select By Column" "Select By Record Value" "Exit")
                 while [ true ];
-                do
-                    echo "************************************Select Menu************************************"
+                do  
+                    
+                    echo -e "\e[33m************************************Select Menu************************************\e[0m"
                     for ((i=0; i<${#choices[@]}; i++)); do
-                        echo "$((i+1)). ${choices[i]}"
+                        echo -e "\e[33m$((i+1)). ${choices[i]}\e[0m"
                     done
                     read -p "Enter Select Operation Number: " choice
                     case $choice in
-                        1)  
-                            selectAll
-                            
+                        1)  clear
+                            selectAll 
                         ;;
-                        2) 
-                            
+                        2)   clear    
                             selectByColumn
                         ;;
-                        3)  
+                        3)  clear
                             selectByRecord
                         ;;
                         4)  clear
                             break
                         ;;
                         *) 
-                        echo "---Invalid Input---"
+                        echo -e "\e[31m---Invalid Input---\e[0m"
                     esac
                 done
 
             else
-                echo "$tableName table does not exist"
+                echo -e "\e[31m$tableName table does not exist\e[0m"
             fi
         else
-            echo "---Invalid table name---"
+            echo -e "\e[31m---Invalid table name---\e[0m"
         fi
     
 }

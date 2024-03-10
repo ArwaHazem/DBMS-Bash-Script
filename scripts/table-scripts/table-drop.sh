@@ -6,7 +6,6 @@ shopt -s extglob
 source ./../../scripts/utilities.sh
 
 dbname=$(basename "$PWD")
-# tableList=$(find_valid_tables "$PWD")
 
 
 drop_table() {
@@ -17,30 +16,30 @@ drop_table() {
             if [[ -f "$tableName" && -f ".$tableName-metadata" ]]; then
 
                 valid_input=false
-                echo "Are you sure you want to drop $tableName table? (y/n)"
+           echo -e "\e[34mAre you sure you want to drop $tableName table? (y/n)\e[0m"
                 while ! $valid_input; do
                     read -r option
                     case $option in
                         [Yy] ) 
                             # will remove table and meta data of table
                             rm "$tableName" ; rm ".$tableName-metadata"
-                            echo "$tableName table has been dropped"
+                            echo -e "\e[32m$tableName table has been dropped\e[0m"
                             valid_input=true
                             ;;
                         [Nn] ) 
-                            echo "---Drop operation is Canceled---"
+                            echo -e "\e[31m---Drop operation is Canceled---\e[0m"
                             valid_input=true
                             ;;
                         * ) 
-                            echo "---Invalid Input. Please enter 'y' or 'n'"
+                            echo -e "\e[31m---Invalid Input. Please enter 'y' or 'n'\e[0m"
                             ;;
                     esac
                 done
             else
-                echo "---$tableName table does not exist---"
+                echo -e "\e[31m---$tableName table does not exist---\e[0m"
             fi
         else
-            echo "---Invalid table name---"
+            echo -e "\e[31m---Invalid table name---\e[0m"
         fi
     
 }
