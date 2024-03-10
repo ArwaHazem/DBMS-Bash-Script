@@ -9,6 +9,7 @@ do
         echo "$((i+1)). ${options[i]}"
     done
     read -p "Enter Data-Base Operation Number:" option
+    
     case $option in
         1)  clear
             ./../scripts/db-scripts/db-create.sh

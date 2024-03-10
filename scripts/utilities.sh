@@ -5,7 +5,7 @@ shopt -s extglob
 
 validate_name() {
     local string="$1"
-    local regex="^[a-zA-Z][_0-9a-zA-Z]{,63}$"
+    local regex="^[_a-zA-Z][_0-9a-zA-Z]{,63}$"
 
     if [[ $string =~ $regex ]]; then
         return 0  # Matches
@@ -50,7 +50,7 @@ check_permission() {
 }
 
 
-find_valid_tables() {
+list_valid_tables() {
     local directory="$1"  
     local filesList=$(find . -maxdepth 1 -type f -not -name ".*" | cut -f2 -d'/')
     local tableList=()
@@ -72,7 +72,3 @@ else
     echo "String does not match the pattern"
 fi
 COMMENT
-
-
-
-

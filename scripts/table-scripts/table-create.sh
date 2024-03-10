@@ -15,7 +15,7 @@ function create_table {
                 echo "---Table "$tablename" already exists---"
             else
                 read -p "please enter number of columns: " num_of_cols
-                while [[ ! "$num_of_cols" =~ ^[1-9][0-9]*$ ]]; do
+                while [[ ! "$num_of_cols" =~ ^[1-9][0-9]{0,3}$ ]]; do
                     echo "Number of columns must be positive number"
                     read -p "please enter number of columns: " num_of_cols
                 done
@@ -56,6 +56,7 @@ function create_table {
 
                 done
                 #another loop for primary key selection
+                echo "***********Column List************8"
                 for ((idx=0; idx<${#columns_names[@]}; idx++)); do
                     echo "$((idx+1)): ${columns_names[idx]}"
                 done
@@ -97,7 +98,6 @@ function create_table {
     else
         clear
         echo "---Invalid table name---"
-
     fi
 }
 create_table
