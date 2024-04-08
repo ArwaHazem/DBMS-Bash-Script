@@ -12,7 +12,7 @@ function insert_into_table {
         read -p "please enter table name: " tablename
         if [[ -f $tablename && -f ".${tablename}-metadata" ]]; then
             #code logic
-            field_count=0
+            # field_count=0
             newrecord=""
             declare -i pk_index
             colnames=($(cut -f1 -d: ".${tablename}-metadata"))
@@ -53,7 +53,7 @@ function insert_into_table {
             if [[ -n "$newrecord" ]]; then
                 echo "${newrecord::-1}" >> "$tablename"
                 clear
-                echo -e "\e[31mNew record added to $tablename successfully\e[0m"
+                echo -e "\e[32mNew record added to $tablename successfully\e[0m"
             else
                 echo -e "\e[31m---No valid record to add----\e[0m"
             fi

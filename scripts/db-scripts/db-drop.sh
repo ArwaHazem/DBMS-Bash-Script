@@ -34,7 +34,7 @@ drop_database() {
                             valid_input=true
                             ;;
                         * ) 
-                            echo -e "\e[31m---Invalid database name---\e[0m"
+                            echo -e "\e[31m---Invalid option---\e[0m"
                             ;;
                     esac
                 done
